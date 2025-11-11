@@ -52,6 +52,41 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
           <span class="nav-text">Services</span>
         </a>
 
+        <a routerLink="/ingresses" routerLinkActive="active" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-text">Ingresses</span>
+        </a>
+
+        <a routerLink="/configmaps" routerLinkActive="active" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 8H16M8 12H16M8 16H12" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-text">ConfigMaps</span>
+        </a>
+
+        <a routerLink="/secrets" routerLinkActive="active" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 15V17M8 11V7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7V11" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="nav-text">Secrets</span>
+        </a>
+
+        <a routerLink="/storage" routerLinkActive="active" class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="4" width="20" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="2" y="11" width="20" height="5" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="2" y="18" width="20" height="2" rx="1" fill="currentColor"/>
+            <circle cx="6" cy="6.5" r="1" fill="currentColor"/>
+            <circle cx="6" cy="13.5" r="1" fill="currentColor"/>
+          </svg>
+          <span class="nav-text">Storage</span>
+        </a>
+
         <a routerLink="/namespaces" routerLinkActive="active" class="nav-item">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>

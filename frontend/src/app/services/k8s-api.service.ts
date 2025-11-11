@@ -1,7 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { Pod, Deployment, Service, Namespace, Node, ResourceMetrics, LogEntry } from '../models/kubernetes.models';
+import {
+  Pod, Deployment, Service, Namespace, Node, ResourceMetrics, LogEntry,
+  Ingress, ConfigMap, Secret, PersistentVolume, PersistentVolumeClaim,
+  StorageClass, NodeMetrics, PodMetrics
+} from '../models/kubernetes.models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -84,6 +88,82 @@ export class K8sApiService {
   // Metrics
   getMetrics(): Observable<ResourceMetrics> {
     return this.http.get<ResourceMetrics>(`${this.apiUrl}/metrics`)
+      .pipe(catchError(this.handleError));
+  }
+
+  getNodeMetrics(): Observable<NodeMetrics[]> {
+    return this.http.get<NodeMetrics[]>(`${this.apiUrl}/metrics/nodes`)
+      .pipe(catchError(this.handleError));
+  }
+
+  getPodMetrics(namespace: string = 'default'): Observable<PodMetrics[]> {
+    return this.http.get<PodMetrics[]>(`${this.apiUrl}/metrics/pods/${namespace}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Ingress
+  getIngresses(namespace: string = 'default'): Observable<Ingress[]> {
+    return this.http.get<Ingress[]>(`${this.apiUrl}/ingresses/${namespace}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteIngress(namespace: string, name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/ingresses/${namespace}/${name}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // ConfigMaps
+  getConfigMaps(namespace: string = 'default'): Observable<ConfigMap[]> {
+    return this.http.get<ConfigMap[]>(`${this.apiUrl}/configmaps/${namespace}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteConfigMap(namespace: string, name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/configmaps/${namespace}/${name}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Secrets
+  getSecrets(namespace: string = 'default'): Observable<Secret[]> {
+    return this.http.get<Secret[]>(`${this.apiUrl}/secrets/${namespace}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteSecret(namespace: string, name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/secrets/${namespace}/${name}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Storage - PersistentVolumes
+  getPersistentVolumes(): Observable<PersistentVolume[]> {
+    return this.http.get<PersistentVolume[]>(`${this.apiUrl}/storage/persistentvolumes`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deletePersistentVolume(name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/storage/persistentvolumes/${name}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Storage - PersistentVolumeClaims
+  getPersistentVolumeClaims(namespace: string = 'default'): Observable<PersistentVolumeClaim[]> {
+    return this.http.get<PersistentVolumeClaim[]>(`${this.apiUrl}/storage/persistentvolumeclaims/${namespace}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deletePersistentVolumeClaim(namespace: string, name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/storage/persistentvolumeclaims/${namespace}/${name}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Storage - StorageClasses
+  getStorageClasses(): Observable<StorageClass[]> {
+    return this.http.get<StorageClass[]>(`${this.apiUrl}/storage/storageclasses`)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteStorageClass(name: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/storage/storageclasses/${name}`)
       .pipe(catchError(this.handleError));
   }
 
