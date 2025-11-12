@@ -239,8 +239,16 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
       }
 
       .toggle-btn {
-        right: -60px;
+        position: fixed;
+        left: 1rem;
+        top: 5rem;
+        right: auto;
         background: rgba(102, 126, 234, 0.95);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .sidebar:not(.collapsed) .toggle-btn {
+        left: calc(280px - 60px);
       }
 
       .sidebar.collapsed {

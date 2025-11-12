@@ -37,11 +37,11 @@ app.use('/api/nodes', nodesRouter);
 app.use('/api/metrics', metricsRouter);
 
 // Serve static files from the Angular app
-app.use(express.static(path.join(__dirname, '../../frontend/dist/k3s-admin-frontend/browser')));
+app.use(express.static(path.join(__dirname, '../frontend/dist/k3s-admin-frontend/browser')));
 
 // All other routes should redirect to the index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/dist/k3s-admin-frontend/browser/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist/k3s-admin-frontend/browser/index.html'));
 });
 
 // Error handling middleware

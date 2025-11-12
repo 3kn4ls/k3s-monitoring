@@ -14,7 +14,7 @@ try {
 }
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
-const k8sMetrics = kc.makeApiClient(k8s.Metrics);
+const metricsApi = new k8s.Metrics(kc);
 
 // Helper function to convert CPU from nano cores
 function formatCpu(cpuString) {
@@ -49,7 +49,7 @@ router.get('/', async (req, res, next) => {
 
     // Try to get metrics from metrics-server
     try {
-      const nodeMetrics = await k8sMetrics.getNodeMetrics();
+      const nodeMetrics = await metricsApi.getNodeMetrics();
       if (nodeMetrics && nodeMetrics.items && nodeMetrics.items.length > 0) {
         let totalCpuNano = 0;
         let totalMemoryKi = 0;
@@ -86,7 +86,7 @@ router.get('/', async (req, res, next) => {
 // Get node metrics
 router.get('/nodes', async (req, res, next) => {
   try {
-    const nodeMetrics = await k8sMetrics.getNodeMetrics();
+    const nodeMetrics = await metricsApi.getNodeMetrics();
 
     const metrics = nodeMetrics.items.map(node => ({
       name: node.metadata.name,
@@ -111,7 +111,7 @@ router.get('/nodes', async (req, res, next) => {
 router.get('/pods/:namespace', async (req, res, next) => {
   try {
     const { namespace } = req.params;
-    const podMetrics = await k8sMetrics.getPodMetrics(namespace);
+    const podMetrics = await metricsApi.getPodMetrics(namespace);
 
     const metrics = podMetrics.items.map(pod => ({
       name: pod.metadata.name,

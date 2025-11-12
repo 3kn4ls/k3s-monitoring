@@ -4,16 +4,22 @@ metadata:
   name: k3s-admin
   namespace: k3s-admin
   annotations:
-    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-https-redirect@kubernetescrd,k3s-admin-k3s-admin-stripprefix@kubernetescrd
 spec:
+  ingressClassName: traefik
   rules:
-    - host: k3s-admin.local
+    - host: northr3nd.duckdns.org
       http:
         paths:
-          - path: /
+          - path: /k3s
             pathType: Prefix
             backend:
               service:
                 name: k3s-admin
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - northr3nd.duckdns.org
+      secretName: k3s-admin-tls

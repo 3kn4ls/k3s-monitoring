@@ -7,13 +7,13 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 
 # Install dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copy frontend source
 COPY frontend/ ./
 
 # Build Angular app for production
-RUN npm run build
+RUN npm run build -- --base-href /k3s/
 
 # Stage 2: Build Backend and Final Image
 FROM node:20-alpine
@@ -24,7 +24,7 @@ WORKDIR /app
 COPY backend/package*.json ./
 
 # Install production dependencies
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy backend source
 COPY backend/src ./src

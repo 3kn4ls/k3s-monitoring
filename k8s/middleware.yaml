@@ -1,0 +1,9 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: k3s-admin-stripprefix
+  namespace: k3s-admin
+spec:
+  stripPrefix:
+    prefixes:
+      - /k3s
