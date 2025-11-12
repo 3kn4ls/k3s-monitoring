@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterLinkActive } from '@angular/router';
 
@@ -7,12 +7,19 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule, RouterLinkActive],
   template: `
+    <button class="toggle-btn" [class.menu-open]="!isCollapsed()" (click)="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Backdrop para cerrar sidebar en móvil -->
+    @if (!isCollapsed()) {
+      <div class="backdrop" (click)="closeSidebar()"></div>
+    }
+
     <aside class="sidebar" [class.collapsed]="isCollapsed()">
-      <button class="toggle-btn" (click)="toggleSidebar()">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
+
 
       <nav class="nav">
         <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
@@ -126,31 +133,33 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
     }
 
     .toggle-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 40px;
-      height: 40px;
+      display: none;
+      position: fixed;
+      width: 48px;
+      height: 48px;
       border: none;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 10px;
-      display: flex;
+      border-radius: 12px;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.3s ease;
-      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .toggle-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
     }
 
     .toggle-btn svg {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       color: white;
+    }
+
+    .backdrop {
+      display: none;
     }
 
     .nav {
@@ -232,36 +241,70 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
         height: 100vh;
         z-index: 1000;
         transform: translateX(-100%);
+        width: 280px;
       }
 
       .sidebar:not(.collapsed) {
         transform: translateX(0);
       }
 
+      .sidebar.collapsed {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+
       .toggle-btn {
-        position: fixed;
+        display: flex;
         left: 1rem;
-        top: 5rem;
-        right: auto;
-        background: rgba(102, 126, 234, 0.95);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        top: 5.5rem;
         z-index: 1001;
       }
 
-      .sidebar:not(.collapsed) .toggle-btn {
-        left: calc(280px - 3rem);
+      .toggle-btn.menu-open {
+        left: calc(280px + 1rem);
       }
 
-      .sidebar.collapsed {
-        transform: translateX(-100%);
+      /* Backdrop cuando sidebar está abierto */
+      .sidebar:not(.collapsed)::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+      }
+
+      .nav {
+        margin-top: 2rem;
       }
     }
   `]
 })
-export class SidebarComponent {
-  isCollapsed = signal(false);
+export class SidebarComponent implements OnInit {
+  isCollapsed = signal(true);
+
+  ngOnInit() {
+    // Inicializar el estado del sidebar basado en el tamaño de pantalla
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    const isMobile = window.innerWidth <= 768;
+    // En móvil, el sidebar inicia collapsed (oculto)
+    // En desktop, el sidebar inicia expandido (no collapsed)
+    this.isCollapsed.set(isMobile);
+  }
 
   toggleSidebar() {
     this.isCollapsed.update(value => !value);
+  }
+
+  closeSidebar() {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      this.isCollapsed.set(true);
+    }
   }
 }
