@@ -18,8 +18,8 @@ spec:
       serviceAccountName: k3s-admin
       containers:
         - name: k3s-admin
-          image: localhost:5000/k3s-admin:latest
-          imagePullPolicy: Always
+          image: localhost:5000/k3s-admin:v1.0.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
               name: http
