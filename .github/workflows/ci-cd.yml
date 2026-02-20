@@ -93,8 +93,7 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           # Obtener el tag completo del commit (sha-....)
-          IMAGE=$(echo "${{ needs.build-and-push.outputs.image_tag }}" | tr ' ' '
-' | grep ":sha-" | head -n 1)
+          IMAGE=$(echo "${{ needs.build-and-push.outputs.image_tag }}" | tr ' ' '\n' | grep ":sha-" | head -n 1)
           
           echo "Desplegando imagen: $IMAGE"
           
