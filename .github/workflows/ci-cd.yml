@@ -98,10 +98,14 @@ jobs:
           
           echo "Solicitando sincronización a ArgoCD..."
           
+          # Añadimos --connect-timeout y permitimos que falle sin romper el pipeline
+          # ya que el Image Updater se encargará del despliegue automáticamente.
           curl -k -X POST \
+            --connect-timeout 10 \
+            --max-time 20 \
             -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
             -H "Content-Type: application/json" \
             "${ARGOCD_SERVER}/api/v1/applications/k3s-monitoring/sync" \
-            -d '{"prune":false,"dryRun":false,"strategy":{"hook":{"force":true}}}'
+            -d '{"prune":false,"dryRun":false,"strategy":{"hook":{"force":true}}}' || echo "ArgoCD API no disponible, el Image Updater se encargará de la sincronización."
           
-          echo "Sincronización iniciada."
+          echo "Paso de despliegue finalizado."
