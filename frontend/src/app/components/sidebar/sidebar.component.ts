@@ -273,6 +273,7 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
         right: 0;
         bottom: 0;
         z-index: -1;
+        background: white;
       }
 
       .nav {
