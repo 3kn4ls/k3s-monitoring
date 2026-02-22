@@ -18,7 +18,7 @@ spec:
       serviceAccountName: k3s-admin
       containers:
         - name: k3s-admin
-          image: ghcr.io/n0rthr3nd/k3s-admin:v1.0.0
+          image: ghcr.io/n0rthr3nd/k3s-admin:v1.0.3
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
